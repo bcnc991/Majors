@@ -32,13 +32,28 @@ function hexToRGB(hex, alpha){
 $(function () {
   var color_list = ['#BD226B', '#D92423', '#D96637', '#F38C3B', '#FBAF31', '#A6BE43', '#53B64E', '#0D723D',
     '#169882', '#55C4D5', '#25A0D8', '#147FE0', '#0B5D92', '#7D7BA4', '#8C65A9'];
-  var color_listGrad = [];  
+  var color_listGrad = [];
+  var major_groups = ["Agriculture and natural resources",
+    "Architecture and engineering",
+    "Arts",
+    "Biology and life sciences",
+    "Business",
+    "Communications and journalism",
+    "Computers, statistics, and mathematics",
+    "Education",
+    "Health",
+    "Humanities and liberal arts",
+    "Industrial arts, consumer services, and recreation",
+    "Law and public policy",
+    "Physical sciences",
+    "Psychology and social work",
+    "Social sciences"];
   for (i in color_list) {
-    color_listGrad.push(hexToRGB(color_list[i],1));  
+    color_listGrad.push(hexToRGB(color_list[i],1));
   }
   var arr_majors = [];
   var xcat_gmajor = [];
-  
+
   $.get('baplus_ftfy_25_59.txt', function (majorsdata, status) {
     var lines = majorsdata.split('\n');
       $.each(lines, function(lineNo, line) {
@@ -47,7 +62,7 @@ $(function () {
           pushData(arr_majors, items);
         }
       });
-    // Percent grad degree of majors is type = 2 and 3 
+    // Percent grad degree of majors is type = 2 and 3
     var arr_pggmajor = $.grep(arr_majors, function (n, i) {
       return n.type == 2;
     });
@@ -104,9 +119,9 @@ $(function () {
     });
     var overall_ba = arr_schl[0].p50;
     var overall_grad = arr_schl[1].p50;
-     
+
     console.log(xcat_gmajor);
-    
+
     $('#main_chart').highcharts({
         chart: {
             inverted: true
@@ -123,7 +138,7 @@ $(function () {
         },
         xAxis: {
             title: {
-              text: 'Undergraduate major' 
+              text: 'Undergraduate major'
               //align: 'top',
               //rotation: 0
             },
@@ -162,7 +177,7 @@ $(function () {
               color: '#bfbfbf',
               value: overall_grad,
               dashStyle: 'shortDash',
-              width: 2,  
+              width: 2,
               label: {
                 text: "All graduate<br> degrees",
                 rotation: 0,
@@ -195,12 +210,12 @@ $(function () {
                     hideDelay: 100,
                     pointFormatter: function () {
                         var diff = Math.round(this.high/10000)*10000 - Math.round(this.low/10000)*10000;
-                        return this.series.name + ': <br>' +  
+                        return this.series.name + ': <br>' +
                           "P25:" + Highcharts.numberFormat(Math.round(this.low/10000)*10000,0) + '<br>' +
-                          "P75:" + Highcharts.numberFormat(Math.round(this.high/10000)*10000,0) + '<br>' +  
+                          "P75:" + Highcharts.numberFormat(Math.round(this.high/10000)*10000,0) + '<br>' +
                           "Earnings difference: " + Highcharts.numberFormat(diff,0);
                       }
-                    }                  
+                    }
             }
         },
         legend: {
@@ -244,7 +259,7 @@ $(function () {
             },
             data: arr_p50gradgmajor
             }
-      ] 
+      ]
     });
 
     $('#main_popchart').highcharts({
@@ -287,7 +302,7 @@ $(function () {
                     pointFormatter: function () {
                         return this.series.name +": " + Math.round(this.y*100) + "%";
                       }
-                    }                  
+                    }
             }
         },
         legend: {
@@ -308,25 +323,22 @@ $(function () {
             colorByPoint: true,
             data: arr_pctgradgmajor
           }
-      ] 
+      ]
     });
 
     // Get the modal
-    var modal = document.getElementById('myModal');      
+    var modal = document.getElementById('myModal');
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-    
+
     var modal_data = [];
     //btn.onclick = function() {
-      $("#sel_group_majors").change(function() {
-        var str_gmajor = "";
-        $("#sel_group_majors option:selected").each(function() {
-          str_gmajor = $( this ).val();
-        });
+    function change_major (pmajorname) {
+        var str_gmajor = pmajorname;
         $('.modal-header h2').text(str_gmajor);
-        /* This should not be necessary, index is zero based - possibly because of disabled option? */
-        var color_to_use = $("#sel_group_majors option:selected").index() - 1; 
-        
+
+        var color_to_use = major_groups.indexOf(str_gmajor);
+
         modal.style.display = "block";
         modal_badata = $.grep(arr_badmajor, function (n, i) {
           return n.gmajor == str_gmajor;
@@ -334,13 +346,13 @@ $(function () {
         modal_graddata = $.grep(arr_graddmajor, function (n, i) {
           return n.gmajor == str_gmajor;
         });
-       
+
         var xcat_dmajor = [];
         // Fill arrays for charts
         $.each(modal_badata, function(items, item) {
            xcat_dmajor.push(item.dmajor);
         });
-        
+
         var arr_rngbadmajor = [];
         var arr_p50badmajor = [];
         var i = -1;
@@ -359,7 +371,7 @@ $(function () {
            arr_rnggraddmajor.push({low:item.p25, high:item.p75});
            arr_p50graddmajor.push({x:i + 0.15, y:item.p50, boost: boost, dboost: dboost});
         });
-        
+
         var arr_pctbadmajor = [];
         $.each(modal_badata, function(items, item) {
           arr_pctbadmajor.push(item.pct_tsg);
@@ -368,7 +380,7 @@ $(function () {
         $.each(modal_graddata, function(items, item) {
           arr_pctgraddmajor.push(item.pct_tsg);
         });
-        
+
         $('#modal_chart').highcharts({
             chart: {
                 inverted: true
@@ -376,17 +388,17 @@ $(function () {
             title: {
                 text: 'Earnings'
             },
-    
+
             subtitle: {
                 text: ''
             },
             credits: {
                 enabled: false
             },
-    
+
             xAxis: {
                 title: {
-                  text: 'Undergraduate major' 
+                  text: 'Undergraduate major'
                   //align: 'top',
                   //rotation: 0
                 },
@@ -398,7 +410,7 @@ $(function () {
                 },
                 categories: xcat_dmajor
             },
-    
+
             yAxis: {
                 title: {
                     text: ''
@@ -420,7 +432,7 @@ $(function () {
                   color: '#bfbfbf',
                   value: overall_grad,
                   dashStyle: 'shortDash',
-                  width: 2,  
+                  width: 2,
                   label: {
                     text: "All graduate<br> degrees",
                     rotation: 0,
@@ -453,12 +465,12 @@ $(function () {
                         hideDelay: 100,
                         pointFormatter: function () {
                             var diff = Math.round(this.high/10000)*10000 - Math.round(this.low/10000)*10000;
-                            return this.series.name + ': <br>' +  
+                            return this.series.name + ': <br>' +
                               "P25:" + Highcharts.numberFormat(Math.round(this.low/10000)*10000,0) + '<br>' +
-                              "P75:" + Highcharts.numberFormat(Math.round(this.high/10000)*10000,0) + '<br>' +  
+                              "P75:" + Highcharts.numberFormat(Math.round(this.high/10000)*10000,0) + '<br>' +
                               "Earnings difference: " + Highcharts.numberFormat(diff,0);
                           }
-                        }                  
+                        }
                 }
             },
             legend: {
@@ -502,28 +514,28 @@ $(function () {
                 },
                 data: arr_p50graddmajor
                 }
-          ] 
+          ]
         });
         $('#modal_popchart').highcharts({
-    
+
             title: {
                 text: 'Share'
             },
-    
+
             subtitle: {
                 text: ''
             },
             credits: {
                 enabled: false
             },
-    
+
             xAxis: {
                 labels: {
                   enabled: false
                 },
                 categories: xcat_dmajor
             },
-    
+
             yAxis: {
                 title: {
                     text: ''
@@ -544,13 +556,13 @@ $(function () {
                         pointFormatter: function () {
                             return this.series.name +": " + Math.round(this.y*100) + "%";
                           }
-                        }                  
+                        }
                 }
             },
             legend: {
                 enabled: false
             },
-    
+
             series: [{
                 name: "Bachelor's degree",
                 color: color_list[color_to_use],
@@ -565,16 +577,16 @@ $(function () {
                 colorByPoint: false,
                 data: arr_pctgraddmajor
               }
-          ] 
+          ]
         });
-        // console.log(xcat_dmajor);        
-    });
-    
+        // console.log(xcat_dmajor);
+    }
+
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
     };
-    
+
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
@@ -583,64 +595,49 @@ $(function () {
     };
   });
   $('#agriculture-and-natural-resources-icon').click(function(){
-    $("#sel_group_majors option")[1].selected = true;
-    $("#sel_group_majors option:selected").val("Agriculture and natural resources").change();
+    change_major("Agriculture and natural resources");
   });
   $('#architecture-and-engineering-icon').click(function(){
-    $("#sel_group_majors option")[2].selected = true;
-    $("#sel_group_majors option:selected").val('Architecture and engineering').change();
+    change_major('Architecture and engineering');
   });
   $('#arts-icon').click(function(){
-    $("#sel_group_majors option")[3].selected = true;
-    $("#sel_group_majors option:selected").val("Arts").change();
+    change_major("Arts");
   });
   $('#biology-and-life-sciences-icon').click(function(){
-    $("#sel_group_majors option")[4].selected = true;
-    $("#sel_group_majors option:selected").val('Biology and life sciences').change();
+    change_major('Biology and life sciences');
   });
   $('#business-icon').click(function(){
-    $("#sel_group_majors option")[5].selected = true;
-    $("#sel_group_majors option:selected").val("Business").change();
+    change_major("Business");
   });
   $('#communications-and-journalism-icon').click(function(){
-    $("#sel_group_majors option")[6].selected = true;
-    $("#sel_group_majors option:selected").val('Communications and journalism').change();
+    change_major('Communications and journalism');
   });
   $('#computers-statistics-and-mathematics-icon').click(function(){
-    $("#sel_group_majors option")[7].selected = true;
-    $("#sel_group_majors option:selected").val("Computers, statistics, and mathematics").change();
+    change_major("Computers, statistics, and mathematics");
   });
   $('#education-icon').click(function(){
-    $("#sel_group_majors option")[8].selected = true;
-    $("#sel_group_majors option:selected").val('Education').change();
+    change_major('Education');
   });
   $('#health-icon').click(function(){
-    $("#sel_group_majors option")[9].selected = true;
-    $("#sel_group_majors option:selected").val("Health").change();
+    change_major("Health");
   });
   $('#humanities-and-liberal-arts-icon').click(function(){
-    $("#sel_group_majors option")[10].selected = true;
-    $("#sel_group_majors option:selected").val('Humanities and liberal arts').change();
+    change_major('Humanities and liberal arts');
   });
   $('#industrial-arts-consumer-services-and-recreation-icon').click(function(){
-    $("#sel_group_majors option")[11].selected = true;
-    $("#sel_group_majors option:selected").val('Industrial arts, consumer services, and recreation').change();
+    change_major('Industrial arts, consumer services, and recreation');
   });
   $('#law-and-public-policy-icon').click(function(){
-    $("#sel_group_majors option")[12].selected = true;
-    $("#sel_group_majors option:selected").val("Law and public policy").change();
+    change_major("Law and public policy");
   });
   $('#physical-sciences-icon').click(function(){
-    $("#sel_group_majors option")[13].selected = true;
-    $("#sel_group_majors option:selected").val('Physical sciences').change();
+    change_major('Physical sciences');
   });
   $('#psychology-and-social-work-icon').click(function(){
-    $("#sel_group_majors option")[14].selected = true;
-    $("#sel_group_majors option:selected").val("Psychology and social work").change();
+    change_major("Psychology and social work");
   });
   $('#social-sciences-icon').click(function(){
-    $("#sel_group_majors option")[15].selected = true;
-    $("#sel_group_majors option:selected").val('Social sciences').change();
+    change_major('Social sciences')change_major;
   });
-  
+
 });
