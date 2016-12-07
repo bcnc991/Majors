@@ -1,0 +1,125 @@
+#main_chart, #modal_chart {
+  position: relative;
+  height: 600px;
+  width: 70%;
+  float: left;
+}
+
+#main_popchart,#modal_popchart {
+  position: relative;
+  height: 600px;
+  width: 30%;
+  float: right;
+}
+
+#modal_chart {
+  padding-top: 0
+}
+
+.sel_group_majors {
+  padding-bottom: 25px;  
+}
+
+.agriculture-and-natural-resources-icon {
+  color: #BD226B;
+}
+.architecture-and-engineering-icon {
+  color: #D92423;
+}
+.arts-icon {
+  color: #D96637;
+}
+.biology-and-life-sciences-icon {
+  color: #F38C3B; 
+}
+.business-icon {
+  color: #FBAF31; 
+}
+.communications-and-journalism-icon {
+  color: #A6BE43; 
+}
+.computers-statistics-and-mathematics-icon {
+  color: #53B64E; 
+}
+.education-icon {
+  color: #0D723D; 
+}
+.health-icon {
+  color: #169882; 
+}
+.humanities-and-liberal-arts-icon {
+  color: #55C4D5; 
+}
+.industrial-arts-consumer-services-and-recreation-icon {
+  color: #25A0D8; 
+}
+.law-and-public-policy-icon {
+  color: #147FE0; 
+}
+.physical-sciences-icon {
+  color: #0B5D92; 
+}
+.psychology-and-social-work-icon {
+  color: #7D7BA4; 
+}
+.social-sciences-icon {
+  color: #8C65A9; 
+}
+
+/* The Modal (background) */
+/* From w3schools.org */ 
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #79a6d2;
+    color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #79a6d2;
+    color: white;
+}
