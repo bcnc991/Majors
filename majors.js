@@ -338,7 +338,7 @@ $(function () {
         $('.modal-header h2').text(str_gmajor);
 
         var color_to_use = major_groups.indexOf(str_gmajor);
-
+        
         modal.style.display = "block";
         modal_badata = $.grep(arr_badmajor, function (n, i) {
           return n.gmajor == str_gmajor;
@@ -580,7 +580,7 @@ $(function () {
           ]
         });
         // console.log(xcat_dmajor);
-    }
+    };
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
@@ -591,7 +591,7 @@ $(function () {
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
-        }
+        };
     };
   });
   $('#agriculture-and-natural-resources-icon').click(function(){
@@ -637,7 +637,7 @@ $(function () {
     change_major("Psychology and social work");
   });
   $('#social-sciences-icon').click(function(){
-    change_major('Social sciences')change_major;
+    change_major('Social sciences');
   });
 
 });
