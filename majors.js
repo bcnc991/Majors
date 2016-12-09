@@ -274,7 +274,6 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines) {
       ]
     });
     
-
     var modal = document.getElementById('myModal');
     $('.modal-header h2').text(str_gmajor);
     modal.style.display = "block";
@@ -293,6 +292,265 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines) {
             modal.style.display = "none";
         };
     };
+}
+
+function display_all_majors(pxcat, pgba, pggrad, balines, gradlines) {
+    // Fill arrays for charts
+    var xcat_gmajor = [];
+    $.each(pxcat, function(items, item) {
+       xcat_gmajor.push(item.gmajor);
+    });
+    var arr_rngbagmajor = [];
+    var arr_p50bagmajor = [];
+    var i = -1;
+    $.each(pgba, function(items, item) {
+       i = i + 1;
+       arr_rngbagmajor.push({low:item.p25, high:item.p75});
+       arr_p50bagmajor.push({x:i - 0.2, y:item.p50});
+    });
+    var arr_rnggradgmajor = [];
+    var arr_p50gradgmajor = [];
+    var i = -1;
+    $.each(pggrad, function(items, item) {
+       i = i + 1;
+       var dboost = Math.round((pggrad[i].p50 - pgba[i].p50) / 10000) * 10000;
+       var boost = Math.round(((pggrad[i].p50/pgba[i].p50) - 1) * 100) + "%";
+       arr_rnggradgmajor.push({low:item.p25, high:item.p75});
+       arr_p50gradgmajor.push({x:i + 0.15, y:item.p50, boost: boost, dboost: dboost});
+    });
+    var arr_pctbagmajor = [];
+    $.each(pgba, function(items, item) {
+      arr_pctbagmajor.push(item.pct_ts_all);
+    });
+    var arr_pctgradgmajor = [];
+    $.each(pggrad, function(items, item) {
+      arr_pctgradgmajor.push(item.pct_ts_all);
+    });
+
+    //console.log(xcat_gmajor);
+  
+  $('#modal_chart').highcharts({
+      chart: {
+          inverted: true
+      },
+      title: {
+          text: 'Earnings'
+      },
+
+      subtitle: {
+          text: ''
+      },
+      credits: {
+          enabled: false
+      },
+      xAxis: {
+          title: {
+            text: 'Undergraduate major'
+            //align: 'top',
+            //rotation: 0
+          },
+          labels: {
+            style: {
+              fontSize: '14px',
+              fontWeight: '500'
+            }
+          },
+          categories: xcat_gmajor
+      },
+
+      yAxis: {
+          title: {
+              text: ''
+          },
+          plotLines: [{
+            color: '#000000',
+//              events: {
+//                mouseover: function (){
+//                  alert('mose');
+//                }
+//              },
+            value: balines,
+            dashStyle: 'shortDash',
+            width: 2,
+            label: {
+              text: "All Bachelor's<br> degrees",
+              rotation: 0,
+              textAlign: 'center',
+              verticalAlign: 'top',
+              y: -12
+            }
+          },
+          {
+            color: '#bfbfbf',
+            value: gradlines,
+            dashStyle: 'shortDash',
+            width: 2,
+            label: {
+              text: "All graduate<br> degrees",
+              rotation: 0,
+              textAlign: 'center',
+              verticalAlign: 'top',
+              y: -12
+            }
+          }]
+      },
+      plotOptions: {
+          scatter: {
+              tooltip: {
+                  hideDelay: 100,
+                  pointFormatter: function () {
+                    if (this.series.name == "Bachelor's degree") {
+                      return "Median earnings: " + Highcharts.numberFormat(Math.round(this.y/10000)*10000,0) + '<br>';
+                      }
+                     else {
+                       return "Median earnings: " + Highcharts.numberFormat(Math.round(this.y/10000)*10000,0) + '<br>' +
+                    'Graduate boost: ' + Highcharts.numberFormat(this.dboost,0) + " (" + this.boost + ")";
+                     }
+                  }
+              }
+          },
+          columnrange :{
+              dataLabels: {
+                enabled: false
+              },
+              tooltip: {
+                  hideDelay: 100,
+                  pointFormatter: function () {
+                      var diff = Math.round(this.high/10000)*10000 - Math.round(this.low/10000)*10000;
+                      return this.series.name + ': <br>' +
+                        "P25:" + Highcharts.numberFormat(Math.round(this.low/10000)*10000,0) + '<br>' +
+                        "P75:" + Highcharts.numberFormat(Math.round(this.high/10000)*10000,0) + '<br>' +
+                        "Earnings difference: " + Highcharts.numberFormat(diff,0);
+                    }
+                  }
+          }
+      },
+      legend: {
+          enabled: false
+      },
+      series: [{
+          name: "Bachelor's degree",
+          colors: color_list,
+          colorByPoint: true,
+          type: 'columnrange',
+          data: arr_rngbagmajor
+          },
+        {
+          name: 'Graduate degree',
+          type: 'columnrange',
+          colors: color_listGrad,
+          colorByPoint: true,
+          data: arr_rnggradgmajor
+        },
+        {
+          name: "Bachelor's degree",
+          type: 'scatter',
+          marker: {
+            radius: 6,
+            symbol: 'circle',
+            fillColor: '#f0ffff',
+            lineWidth: 2,
+            lineColor: '#000000'
+          },
+          data: arr_p50bagmajor
+          },
+        {
+          name: 'Graduate degree',
+          type: 'scatter',
+          marker: {
+            radius: 6,
+            symbol: 'circle',
+            fillColor: '#f0ffff',
+            lineWidth: 2,
+            lineColor: '#000000'
+          },
+          data: arr_p50gradgmajor
+          }
+    ]
+  });
+  
+  $('#modal_popchart').highcharts({
+
+      title: {
+          text: 'Share'
+      },
+
+      subtitle: {
+          text: ''
+      },
+      credits: {
+          enabled: false
+      },
+
+      xAxis: {
+          labels: {
+            enabled: false
+          },
+          categories: xcat_gmajor
+      },
+
+      yAxis: {
+          title: {
+              text: ''
+          },
+          labels: {
+            formatter: function () {
+              return Math.round(this.value*100);
+            }
+          }
+      },
+      plotOptions: {
+          bar :{
+              dataLabels: {
+                enabled: false
+              },
+              tooltip: {
+                  hideDelay: 100,
+                  pointFormatter: function () {
+                      return this.series.name +": " + Math.round(this.y*100) + "%";
+                    }
+                  }
+          }
+      },
+      legend: {
+          enabled: false
+      },
+
+      series: [{
+          name: "Bachelor's degree",
+          colors: color_list,
+          colorByPoint: true,
+          type: 'bar',
+          data: arr_pctbagmajor
+          },
+        {
+          name: 'Graduate degree',
+          type: 'bar',
+          colors: color_listGrad,
+          colorByPoint: true,
+          data: arr_pctgradgmajor
+        }
+    ]
+  });
+    
+  var modal = document.getElementById('myModal');
+  $('.modal-header h2').text('All major groups');
+  modal.style.display = "block";
+  
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  };
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      };
+  };
 }
 
 var major_groups = ["Agriculture and natural resources",
@@ -319,7 +577,6 @@ for (i in color_list) {
   
 $(function () {
   var arr_majors = [];
-  var xcat_gmajor = [];
   
   $.get('baplus_ftfy_25_59.txt', function (majorsdata, status) {
     var lines = majorsdata.split('\n');
@@ -354,243 +611,12 @@ $(function () {
     var arr_graddmajor = $.grep(arr_majors, function (n, i) {
       return n.type == 7 & n.schl == 'Graduate degree';
     });
-    // Fill arrays for charts
-    $.each(arr_pggmajor, function(items, item) {
-       xcat_gmajor.push(item.gmajor);
-    });
-    var arr_rngbagmajor = [];
-    var arr_p50bagmajor = [];
-    var i = -1;
-    $.each(arr_bagmajor, function(items, item) {
-       i = i + 1;
-       arr_rngbagmajor.push({low:item.p25, high:item.p75});
-       arr_p50bagmajor.push({x:i - 0.2, y:item.p50});
-    });
-    var arr_rnggradgmajor = [];
-    var arr_p50gradgmajor = [];
-    var i = -1;
-    $.each(arr_gradgmajor, function(items, item) {
-       i = i + 1;
-       var dboost = Math.round((arr_gradgmajor[i].p50 - arr_bagmajor[i].p50) / 10000) * 10000;
-       var boost = Math.round(((arr_gradgmajor[i].p50/arr_bagmajor[i].p50) - 1) * 100) + "%";
-       arr_rnggradgmajor.push({low:item.p25, high:item.p75});
-       arr_p50gradgmajor.push({x:i + 0.15, y:item.p50, boost: boost, dboost: dboost});
-    });
-    var arr_pctbagmajor = [];
-    $.each(arr_bagmajor, function(items, item) {
-      arr_pctbagmajor.push(item.pct_ts_all);
-    });
-    var arr_pctgradgmajor = [];
-    $.each(arr_gradgmajor, function(items, item) {
-      arr_pctgradgmajor.push(item.pct_ts_all);
-    });
+
     var overall_ba = arr_schl[0].p50;
     var overall_grad = arr_schl[1].p50;
-
-    //console.log(xcat_gmajor);
-
-    $('#main_chart').highcharts({
-        chart: {
-            inverted: true
-        },
-        title: {
-            text: 'Earnings'
-        },
-
-        subtitle: {
-            text: ''
-        },
-        credits: {
-            enabled: false
-        },
-        xAxis: {
-            title: {
-              text: 'Undergraduate major'
-              //align: 'top',
-              //rotation: 0
-            },
-            labels: {
-              style: {
-                fontSize: '14px',
-                fontWeight: '500'
-              }
-            },
-            categories: xcat_gmajor
-        },
-
-        yAxis: {
-            title: {
-                text: ''
-            },
-            plotLines: [{
-              color: '#000000',
-//              events: {
-//                mouseover: function (){
-//                  alert('mose');
-//                }
-//              },
-              value: overall_ba,
-              dashStyle: 'shortDash',
-              width: 2,
-              label: {
-                text: "All Bachelor's<br> degrees",
-                rotation: 0,
-                textAlign: 'center',
-                verticalAlign: 'top',
-                y: -12
-              }
-            },
-            {
-              color: '#bfbfbf',
-              value: overall_grad,
-              dashStyle: 'shortDash',
-              width: 2,
-              label: {
-                text: "All graduate<br> degrees",
-                rotation: 0,
-                textAlign: 'center',
-                verticalAlign: 'top',
-                y: -12
-              }
-            }]
-        },
-        plotOptions: {
-            scatter: {
-                tooltip: {
-                    hideDelay: 100,
-                    pointFormatter: function () {
-                      if (this.series.name == "Bachelor's degree") {
-                        return "Median earnings: " + Highcharts.numberFormat(Math.round(this.y/10000)*10000,0) + '<br>';
-                        }
-                       else {
-                         return "Median earnings: " + Highcharts.numberFormat(Math.round(this.y/10000)*10000,0) + '<br>' +
-                      'Graduate boost: ' + Highcharts.numberFormat(this.dboost,0) + " (" + this.boost + ")";
-                       }
-                    }
-                }
-            },
-            columnrange :{
-                dataLabels: {
-                  enabled: false
-                },
-                tooltip: {
-                    hideDelay: 100,
-                    pointFormatter: function () {
-                        var diff = Math.round(this.high/10000)*10000 - Math.round(this.low/10000)*10000;
-                        return this.series.name + ': <br>' +
-                          "P25:" + Highcharts.numberFormat(Math.round(this.low/10000)*10000,0) + '<br>' +
-                          "P75:" + Highcharts.numberFormat(Math.round(this.high/10000)*10000,0) + '<br>' +
-                          "Earnings difference: " + Highcharts.numberFormat(diff,0);
-                      }
-                    }
-            }
-        },
-        legend: {
-            enabled: false
-        },
-        series: [{
-            name: "Bachelor's degree",
-            colors: color_list,
-            colorByPoint: true,
-            type: 'columnrange',
-            data: arr_rngbagmajor
-            },
-          {
-            name: 'Graduate degree',
-            type: 'columnrange',
-            colors: color_listGrad,
-            colorByPoint: true,
-            data: arr_rnggradgmajor
-          },
-          {
-            name: "Bachelor's degree",
-            type: 'scatter',
-            marker: {
-              radius: 6,
-              symbol: 'circle',
-              fillColor: '#f0ffff',
-              lineWidth: 2,
-              lineColor: '#000000'
-            },
-            data: arr_p50bagmajor
-            },
-          {
-            name: 'Graduate degree',
-            type: 'scatter',
-            marker: {
-              radius: 6,
-              symbol: 'circle',
-              fillColor: '#f0ffff',
-              lineWidth: 2,
-              lineColor: '#000000'
-            },
-            data: arr_p50gradgmajor
-            }
-      ]
-    });
-
-    $('#main_popchart').highcharts({
-
-        title: {
-            text: 'Share'
-        },
-
-        subtitle: {
-            text: ''
-        },
-        credits: {
-            enabled: false
-        },
-
-        xAxis: {
-            labels: {
-              enabled: false
-            },
-            categories: xcat_gmajor
-        },
-
-        yAxis: {
-            title: {
-                text: ''
-            },
-            labels: {
-              formatter: function () {
-                return Math.round(this.value*100);
-              }
-            }
-        },
-        plotOptions: {
-            bar :{
-                dataLabels: {
-                  enabled: false
-                },
-                tooltip: {
-                    hideDelay: 100,
-                    pointFormatter: function () {
-                        return this.series.name +": " + Math.round(this.y*100) + "%";
-                      }
-                    }
-            }
-        },
-        legend: {
-            enabled: false
-        },
-
-        series: [{
-            name: "Bachelor's degree",
-            colors: color_list,
-            colorByPoint: true,
-            type: 'bar',
-            data: arr_pctbagmajor
-            },
-          {
-            name: 'Graduate degree',
-            type: 'bar',
-            colors: color_listGrad,
-            colorByPoint: true,
-            data: arr_pctgradgmajor
-          }
-      ]
+    
+    $('#all-major-groups-icon').click(function(){
+      display_all_majors(arr_pggmajor, arr_bagmajor, arr_gradgmajor, overall_ba, overall_grad);
     });
     $('#agriculture-and-natural-resources-icon').click(function(){
       change_major('Agriculture and natural resources', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
