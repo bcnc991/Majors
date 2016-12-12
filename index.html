@@ -9,6 +9,8 @@
 <script src="//code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script src="//code.highcharts.com/highcharts.js" type="text/javascript"></script>
 <script src="//code.highcharts.com/highcharts-more.js" type="text/javascript"></script>
+<script src="js/raphael.js"></script>
+<script src="js/jquery.usmap.js"></script>
 <script src="majors.js" type="text/javascript"></script>
 <body>
 
@@ -33,152 +35,167 @@
 
 </div>
 
+<form class = "radio-buttons">
+  Explore 
+  <input type = "radio" name = "chart-type" value = "Explore majors" checked>majors
+  <input type = "radio" name = "chart-type" value = "Explore states">states
+</form>
+
 <section id = "exploreMajorGroups">
-<div class="row">
-<div class="col-md-6" style="text-align:center;">
-
-<div class="row">
-<div class="col-md-3 all-major-groups-icon" id = 'all-major-groups-icon' title = "Click to see all major groups">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-university fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>All major groups</p>
-</div>
-<div class="col-md-3 agriculture-and-natural-resources-icon" id = 'agriculture-and-natural-resources-icon' title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-leaf fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Agriculture and natural resources</p>
-</div>
-<div class="col-md-3 architecture-and-engineering-icon" id = 'architecture-and-engineering-icon' title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-cogs fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Architecture and engineering</p>
-</div>
-<div class="col-md-3 arts-icon" id = "arts-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-paint-brush fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Arts</p>
-</div>
-</div>
-<div class="row">
-<div class="col-md-12">
-&nbsp;
-</div>
-</div>
-<div class="row">
-<div class="col-md-3 biology-and-life-sciences-icon" id = "biology-and-life-sciences-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-eyedropper fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Biology and life sciences</p>
-</div>
-<div class="col-md-3 business-icon" id = "business-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-briefcase fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Business</p>
-</div>
-<div class="col-md-3 communications-and-journalism-icon" id = "communications-and-journalism-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-newspaper-o fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Communications and journalism</p>
-</div>
-<div class="col-md-3 computers-statistics-and-mathematics-icon" id = "computers-statistics-and-mathematics-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-bar-chart fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Computers, statistics, and mathematics</p>
-</div>
-</div>
-<div class="row">
-<div class="col-md-12">
-&nbsp;
-</div>
-</div>
-<div class="row">
-<div class="col-md-3 education-icon" id = "education-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-graduation-cap fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Education</p>
-</div>
-<div class="col-md-3 health-icon" id = "health-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-heartbeat fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Health</p>
-</div>
-<div class="col-md-3 humanities-and-liberal-arts-icon" id = "humanities-and-liberal-arts-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-fire fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Humanities and liberal arts</p>
-</div>
-<div class="col-md-3 industrial-arts-consumer-services-and-recreation-icon" id = "industrial-arts-consumer-services-and-recreation-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-trophy fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Industrial arts, consumer services, and recreation</p>
-</div>
-</div>
-<div class="row">
-<div class="col-md-12">
-&nbsp;
-</div>
-</div>
-<div class="row">
-<div class="col-md-3 law-and-public-policy-icon" id = "law-and-public-policy-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-gavel fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Law and public policy</p>
-</div>
-<div class="col-md-3 physical-sciences-icon" id = "physical-sciences-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-flask fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Physical sciences</p>
-</div>
-<div class="col-md-3 psychology-and-social-work-icon" id = "psychology-and-social-work-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-users fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Psychology and social work</p>
-</div>
-<div class="col-md-3 social-sciences-icon" id = "social-sciences-icon" title = "Click to explore this major">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-circle fa-stack-2x"></i>
-  <i class="fa fa-globe fa-stack-1x fa-inverse"></i>
-</span><br/>
-<p>Social sciences</p>
-</div>
-</div>
-
+<div class="vc_column_container">
+  <div class="row">
+  <div class="col-md-6">
+  
+  <div class="row">
+  <div class="col-md-3 all-major-groups-icon" id = 'all-major-groups-icon' title = "Click to see all major groups">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-university fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>All major groups</p>
+  </div>
+  <div class="col-md-3 agriculture-and-natural-resources-icon" id = 'agriculture-and-natural-resources-icon' title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-leaf fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Agriculture and natural resources</p>
+  </div>
+  <div class="col-md-3 architecture-and-engineering-icon" id = 'architecture-and-engineering-icon' title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-cogs fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Architecture and engineering</p>
+  </div>
+  <div class="col-md-3 arts-icon" id = "arts-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-paint-brush fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Arts</p>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-md-12">
+  &nbsp;
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-md-3 biology-and-life-sciences-icon" id = "biology-and-life-sciences-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-eyedropper fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Biology and life sciences</p>
+  </div>
+  <div class="col-md-3 business-icon" id = "business-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-briefcase fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Business</p>
+  </div>
+  <div class="col-md-3 communications-and-journalism-icon" id = "communications-and-journalism-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-newspaper-o fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Communications and journalism</p>
+  </div>
+  <div class="col-md-3 computers-statistics-and-mathematics-icon" id = "computers-statistics-and-mathematics-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-bar-chart fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Computers, statistics, and mathematics</p>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-md-12">
+  &nbsp;
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-md-3 education-icon" id = "education-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-graduation-cap fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Education</p>
+  </div>
+  <div class="col-md-3 health-icon" id = "health-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-heartbeat fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Health</p>
+  </div>
+  <div class="col-md-3 humanities-and-liberal-arts-icon" id = "humanities-and-liberal-arts-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-fire fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Humanities and liberal arts</p>
+  </div>
+  <div class="col-md-3 industrial-arts-consumer-services-and-recreation-icon" id = "industrial-arts-consumer-services-and-recreation-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-trophy fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Industrial arts, consumer services, and recreation</p>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-md-12">
+  &nbsp;
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-md-3 law-and-public-policy-icon" id = "law-and-public-policy-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-gavel fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Law and public policy</p>
+  </div>
+  <div class="col-md-3 physical-sciences-icon" id = "physical-sciences-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-flask fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Physical sciences</p>
+  </div>
+  <div class="col-md-3 psychology-and-social-work-icon" id = "psychology-and-social-work-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Psychology and social work</p>
+  </div>
+  <div class="col-md-3 social-sciences-icon" id = "social-sciences-icon" title = "Click to explore this major">
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-globe fa-stack-1x fa-inverse"></i>
+  </span><br/>
+  <p>Social sciences</p>
+  </div>
+  </div>
+  </div>
+  
+  <div class="col-md-6">
+    <div id="clicked-state">Select a state below:</div>
+    <div id="map" style="width: 100%; height: 378px;"></div>
+    <div id="selected-state">No state selected</div>
+  </div>
+  
+  </div>
 </div>
 </section>
 
-    <p id = "footnote">Source: U.S. Census Bureau, <em>American Community Survey</em> micro data, 2009-2015, based on full-time full-year workers age 25-59 with a Bachelor's
-    degree but without a graduate degree. Percents may not sum to 100 because small sample sizes were excluded.
-    </p>
+<p id = "footnote">Source: U.S. Census Bureau, <em>American Community Survey</em> micro data, 2009-2015, based on full-time full-year workers age 25-59 with a Bachelor's
+degree but without a graduate degree. Percents may not sum to 100 because small sample sizes were excluded.
+</p>
 
 </body>
 </html>

@@ -16,10 +16,42 @@
   padding-top: 0
 }
 
+#footnote {
+  padding: 20px
+}
+
+.radio-buttons {
+  padding: 20px;
+  font-weight: bold;
+  font-size: 1.8em;
+}
+
+input[type="radio"] {
+  margin: 0px 10px 0px 10px;
+}
+
 .sel_group_majors {
   padding-bottom: 25px;  
 }
-
+.col-md-6 {
+  text-align: left
+}
+.vc_column_container {
+  margin-left: 20px;
+}
+#clicked-state {
+  width: 50%;
+  background:#f2f2f2;
+  padding: 5px;
+  font-weight: bold;
+}
+#selected-state {
+  width: 60%;
+  height: 35px;
+  background:#f2f2f2;
+  padding: 5px;
+  font-weight: bold;
+}
 .all-major-groups-icon {
   color: #800000 
 }
