@@ -19,6 +19,7 @@ function pushData(dobj, things) {
           'pct_tsg_all': parseFloat(things[19])
           });
 }
+
 function hexToRGB(hex, alpha){
   var r = parseInt( hex.slice(1,3), 16 ),
       g = parseInt( hex.slice(3,5), 16 ),
@@ -65,6 +66,23 @@ function convert_state(name, to) {
     return returnthis;
 }
 
+function drawmap () {
+      $('#map').usmap({
+      showLabels: true,
+      stateHoverStyles: {fill: '#DABA61'},    
+      'mouseover': function(event, data) {
+        var FullState = convert_state(data.name,"name");    
+        $('#clicked-state').text('Click for selection to take effect: '+ FullState);
+      },
+      'mouseout': function(event, data) {
+        $('#clicked-state').text('Select a state below.');
+      },      
+      'click' : function(event, data) {
+        var FullState = convert_state(data.name,"name");    
+        $('#selected-state').html('You have selected: ' + FullState + '. Now select a major on the left.');
+      }
+    });
+}
 function change_major(pmajorname, pbadata, pgraddata, balines, gradlines) {
     // Get the modal
     var str_gmajor = pmajorname;
@@ -611,7 +629,7 @@ for (i in color_list) {
   color_listGrad.push(hexToRGB(color_list[i],1));
 }
   
-$(function () {
+$(document).ready(function () {
   var arr_majors = [];
   
   $.get('baplus_ftfy_25_59.txt', function (majorsdata, status) {
@@ -701,22 +719,35 @@ $(function () {
     });
 
     $('#map').usmap({
-    showLabels: true,
-    stateHoverStyles: {fill: '#DABA61'},
-    
-    'mouseover': function(event, data) {
-      var FullState = convert_state(data.name,"name");    
-      $('#clicked-state').text('Click for selection to take effect: '+ FullState);
-    },
-    'mouseout': function(event, data) {
-      $('#clicked-state').text('Select a state below.');
-    },      
-    'click' : function(event, data) {
-      var FullState = convert_state(data.name,"name");    
-      $('#selected-state').html('You have selected: ' + FullState + '. Now select a major on the left.');
+      showLabels: true,
+      stateHoverStyles: {fill: '#DABA61'},    
+      'mouseover': function(event, data) {
+        var FullState = convert_state(data.name,"name");    
+        $('#clicked-state').text('Click for selection to take effect: '+ FullState);
+      },
+      'mouseout': function(event, data) {
+        $('#clicked-state').text('Select a state below.');
+      },      
+      'click' : function(event, data) {
+        var FullState = convert_state(data.name,"name");    
+        $('#selected-state').html('You have selected: ' + FullState + '. Now select a major on the left.');
       }
     });
-    
+    var stateDataRead = false;
+    $("input[name='chart-type']").change(function(){
+      console.log($( "input:checked" ).val());  
+      if ($( "input:checked" ).val() == 'States'){
+        document.getElementById('btn-map').style.visibility = "visible";
+        if (stateDataRead == false) {
+          $.get('st_baplus_ftfy_25_59.txt', function (majorsdata, status) {
+            var lines = majorsdata.split('\n');
+          });
+        };
+        stateDataRead = true;
+      }
+      else {
+        document.getElementById('btn-map').style.visibility = "hidden";
+      };      
+    });
   });
- 
 });

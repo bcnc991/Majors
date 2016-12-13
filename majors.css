@@ -52,6 +52,14 @@ input[type="radio"] {
   padding: 5px;
   font-weight: bold;
 }
+#map {
+  width: 100%; 
+  height: 378px;
+}
+#btn-map {
+  visibility: hidden;
+  /* display: none; */
+}
 .all-major-groups-icon {
   color: #800000 
 }
