@@ -19,6 +19,29 @@ function pushData(dobj, things) {
           'pct_tsg_all': parseFloat(things[19])
           });
 }
+function pushStateData(dobj, things) {
+  dobj.push({'stfips': things[0],
+          'schl': things[1],
+          'gmajor': String(things[2]).replace(/['"]+/g, ''),
+          'dmajor': String(things[3]).replace(/['"]+/g, ''),
+          'type': parseFloat(things[4]),
+          'freq': parseFloat(things[5]),
+          'p50': parseFloat(things[6]),
+          'p25': parseFloat(things[7]),
+          'p75': parseFloat(things[8]),
+          'gradegftfy': parseFloat(things[11]),
+          'gradegall': parseFloat(things[12]),
+          'emprate': parseFloat(things[13]),
+          'pct_ts': parseFloat(things[14]),
+          'stabbr': things[15],
+          'pct_tsg': parseFloat(things[16]),
+          'p50r': parseFloat(things[17]),
+          'p25r': parseFloat(things[18]),
+          'p75r': parseFloat(things[19]),
+          'pct_ts_all': parseFloat(things[20]),
+          'pct_tsg_all': parseFloat(things[21])
+          });
+}
 
 function hexToRGB(hex, alpha){
   var r = parseInt( hex.slice(1,3), 16 ),
@@ -83,7 +106,7 @@ function drawmap () {
       }
     });
 }
-function change_major(pmajorname, pbadata, pgraddata, balines, gradlines) {
+function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate) {
     // Get the modal
     var str_gmajor = pmajorname;
     var color_to_use = major_groups.indexOf(str_gmajor);
@@ -329,7 +352,12 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines) {
     });
     
     var modal = document.getElementById('myModal');
-    $('.modal-header h2').text(str_gmajor);
+    if (pstate != null) {
+      $('.modal-header h2').text('All major groups: ' + pstate);
+    }
+    else {
+      $('.modal-header h2').text('All major groups: National');
+    }    
     modal.style.display = "block";
     
     // Get the <span> element that closes the modal
@@ -348,7 +376,7 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines) {
     };
 }
 
-function display_all_majors(pxcat, pgba, pggrad, balines, gradlines) {
+function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
     // Fill arrays for charts
     var xcat_gmajor = [];
     $.each(pxcat, function(items, item) {
@@ -588,7 +616,12 @@ function display_all_majors(pxcat, pgba, pggrad, balines, gradlines) {
   });
     
   var modal = document.getElementById('myModal');
-  $('.modal-header h2').text('All major groups');
+  if (pstate != null) {
+    $('.modal-header h2').text('All major groups: ' + pstate);
+  }
+  else {
+    $('.modal-header h2').text('All major groups: National');
+  }
   modal.style.display = "block";
   
   // Get the <span> element that closes the modal
@@ -670,10 +703,35 @@ $(document).ready(function () {
     var overall_grad = arr_schl[1].p50;
     
     $('#all-major-groups-icon').click(function(){
-      display_all_majors(arr_pggmajor, arr_bagmajor, arr_gradgmajor, overall_ba, overall_grad);
+      if (viewState) {
+        var varr_pggmajor = $.grep(arr_stpggmajor, function (n, i) {
+          return n.stabbr == SelectedState;
+        });
+        var varr_bagmajor = $.grep(arr_stbagmajor, function (n, i) {
+          return n.stabbr == SelectedState;
+        });
+        var varr_gradgmajor = $.grep(arr_stgradgmajor, function (n, i) {
+          return n.stabbr == SelectedState;
+        });
+        display_all_majors(varr_pggmajor, varr_bagmajor, varr_gradgmajor, overall_ba, overall_grad, FullState);        
+      }
+      else {
+        display_all_majors(arr_pggmajor, arr_bagmajor, arr_gradgmajor, overall_ba, overall_grad);
+      }
     });
     $('#agriculture-and-natural-resources-icon').click(function(){
-      change_major('Agriculture and natural resources', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
+      if (viewState) {
+        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+          return n.stabbr == SelectedState;
+        });
+        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+          return n.stabbr == SelectedState;
+        });
+        change_major('Agriculture and natural resources', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+      }
+      else {
+        change_major('Agriculture and natural resources', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
+      }
     });
     $('#architecture-and-engineering-icon').click(function(){
       change_major('Architecture and engineering', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -717,35 +775,83 @@ $(document).ready(function () {
     $('#social-sciences-icon').click(function(){
       change_major('Social sciences', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
     });
-
+    
+    var SelectedState = null;
+    var FullState = null;
+    var stateDataRead = false;
+    var viewState = false;
+    var arr_stmajors = [];
+    var arr_stpggmajor = [];
+    var arr_stpgdmajor = [];
+    var arr_stschl = [];
+    var arr_stbagmajor = [];
+    var arr_stgradgmajor = [];
+    var arr_stbadmajor = [];
+    var arr_stgraddmajor = [];
+    
     $('#map').usmap({
       showLabels: true,
       stateHoverStyles: {fill: '#DABA61'},    
       'mouseover': function(event, data) {
-        var FullState = convert_state(data.name,"name");    
+        FullState = convert_state(data.name,"name");    
         $('#clicked-state').text('Click for selection to take effect: '+ FullState);
       },
       'mouseout': function(event, data) {
         $('#clicked-state').text('Select a state below.');
       },      
       'click' : function(event, data) {
-        var FullState = convert_state(data.name,"name");    
+        FullState = convert_state(data.name,"name");  
+        SelectedState = data.name;  
         $('#selected-state').html('You have selected: ' + FullState + '. Now select a major on the left.');
       }
     });
-    var stateDataRead = false;
+    
     $("input[name='chart-type']").change(function(){
-      console.log($( "input:checked" ).val());  
+      
       if ($( "input:checked" ).val() == 'States'){
+        // console.log($( "input:checked" ).val());
         document.getElementById('btn-map').style.visibility = "visible";
-        if (stateDataRead == false) {
+        viewState = true;
+        if (!stateDataRead) {
           $.get('st_baplus_ftfy_25_59.txt', function (majorsdata, status) {
-            var lines = majorsdata.split('\n');
+          var lines = majorsdata.split('\n');
+          $.each(lines, function(lineNo, line) {
+            var items = line.split('\t');
+            if (lineNo > 0) {
+              pushStateData(arr_stmajors, items);
+            }
           });
-        };
-        stateDataRead = true;
+          // Percent grad degree of majors 
+          arr_stpggmajor = $.grep(arr_stmajors, function (n, i) {
+            return n.type == 10;
+          });
+          arr_stpgdmajor = $.grep(arr_stmajors, function (n, i) {
+            return n.type == 11;
+          });
+          // Bachelor's and graduate degree overall
+          arr_stschl = $.grep(arr_stmajors, function (n, i) {
+            return n.type == 12;
+          });
+          // Terminal BA and Grad by grouped major
+          arr_stbagmajor = $.grep(arr_stmajors, function (n, i) {
+            return n.type == 14 & n.schl == 'Bachelors';
+          });
+          arr_stgradgmajor = $.grep(arr_stmajors, function (n, i) {
+            return n.type == 14 & n.schl == 'Graduate degree';
+          });
+          // Terminal BA and Grad by detailed major
+          arr_stbadmajor = $.grep(arr_stmajors, function (n, i) {
+            return n.type == 15 & n.schl == 'Bachelors';
+          });
+          arr_stgraddmajor = $.grep(arr_stmajors, function (n, i) {
+            return n.type == 15 & n.schl == 'Graduate degree';
+          });
+          stateDataRead = true;
+          });
+        }        
       }
       else {
+        viewState = false;
         document.getElementById('btn-map').style.visibility = "hidden";
       };      
     });
