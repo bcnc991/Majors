@@ -705,17 +705,22 @@ $(document).ready(function () {
     var overall_grad = arr_schl[1].p50;
     
     $('#all-major-groups-icon').click(function(){
-      if (viewState & FullState !== null) {
-        var varr_pggmajor = $.grep(arr_stpggmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_bagmajor = $.grep(arr_stbagmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_gradgmajor = $.grep(arr_stgradgmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        display_all_majors(varr_pggmajor, varr_bagmajor, varr_gradgmajor, overall_ba, overall_grad, FullState);        
+      if (viewState) {
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_pggmajor = $.grep(arr_stpggmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_bagmajor = $.grep(arr_stbagmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_gradgmajor = $.grep(arr_stgradgmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          display_all_majors(varr_pggmajor, varr_bagmajor, varr_gradgmajor, overall_ba, overall_grad, FullState);      
+        }  
       }
       else {
         display_all_majors(arr_pggmajor, arr_bagmajor, arr_gradgmajor, overall_ba, overall_grad);
@@ -723,13 +728,18 @@ $(document).ready(function () {
     });
     $('#agriculture-and-natural-resources-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Agriculture and natural resources', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Agriculture and natural resources', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);
+        }        
       }
       else {
         change_major('Agriculture and natural resources', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -737,13 +747,18 @@ $(document).ready(function () {
     });
     $('#architecture-and-engineering-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Architecture and engineering', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Architecture and engineering', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major('Architecture and engineering', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -751,13 +766,18 @@ $(document).ready(function () {
     });
     $('#arts-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Arts', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Arts', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major("Arts", arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -765,13 +785,18 @@ $(document).ready(function () {
     });
     $('#biology-and-life-sciences-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Biology and life sciences', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Biology and life sciences', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major('Biology and life sciences', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -779,13 +804,18 @@ $(document).ready(function () {
     });
     $('#business-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Business', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Business', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major("Business", arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -793,13 +823,18 @@ $(document).ready(function () {
     });
     $('#communications-and-journalism-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Communications and journalism', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Communications and journalism', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major('Communications and journalism', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -807,13 +842,18 @@ $(document).ready(function () {
     });
     $('#computers-statistics-and-mathematics-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Computers, statistics, and mathematics', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Computers, statistics, and mathematics', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major("Computers, statistics, and mathematics", arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -821,13 +861,18 @@ $(document).ready(function () {
     });
     $('#education-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Education', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Education', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major('Education', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -835,13 +880,18 @@ $(document).ready(function () {
     });
     $('#health-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Health', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Health', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major("Health", arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -849,13 +899,18 @@ $(document).ready(function () {
     });
     $('#humanities-and-liberal-arts-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Humanities and liberal arts', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Humanities and liberal arts', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major('Humanities and liberal arts');
@@ -863,13 +918,18 @@ $(document).ready(function () {
     });
     $('#industrial-arts-consumer-services-and-recreation-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Industrial arts, consumer services, and recreation', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Industrial arts, consumer services, and recreation', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major('Industrial arts, consumer services, and recreation', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -877,13 +937,18 @@ $(document).ready(function () {
     });
     $('#law-and-public-policy-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Law and public policy', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Law and public policy', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);
+        }        
       }
       else {
         change_major("Law and public policy", arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -891,13 +956,18 @@ $(document).ready(function () {
     });
     $('#physical-sciences-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Physical sciences', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Physical sciences', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);
+        }        
       }
       else {
         change_major('Physical sciences', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -905,13 +975,18 @@ $(document).ready(function () {
     });
     $('#psychology-and-social-work-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Psychology and social work', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Psychology and social work', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        }
       }
       else {
         change_major("Psychology and social work", arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
@@ -919,13 +994,18 @@ $(document).ready(function () {
     });
     $('#social-sciences-icon').click(function(){
       if (viewState) {
-        var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-          return n.stabbr == SelectedState;
-        });
-        change_major('Social sciences', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+        if (FullState == null) {
+          alert("No state has been selected");
+        }
+        else {
+          var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
+            return n.stabbr == SelectedState;
+          });
+          change_major('Social sciences', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);
+        }        
       }
       else {
         change_major('Social sciences', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
