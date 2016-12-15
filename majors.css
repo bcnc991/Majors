@@ -26,6 +26,7 @@
   font-size: 1.8em;
 }
 
+
 input[type="radio"] {
   margin: 0px 10px 0px 10px;
 }
@@ -52,13 +53,21 @@ input[type="radio"] {
   padding: 5px;
   font-weight: bold;
 }
+
 #map {
   width: 100%; 
   height: 378px;
 }
 #btn-map {
-  visibility: hidden;
+  /* visibility: hidden; */
   /* display: none; */
+ opacity: 0;
+ pointer-events: none;
+}
+.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 2s linear;  
 }
 .all-major-groups-icon {
   color: #800000 

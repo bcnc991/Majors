@@ -661,7 +661,11 @@ var color_listGrad = [];
 for (i in color_list) {
   color_listGrad.push(hexToRGB(color_list[i],1));
 }
-  
+ 
+function noStateSelectedMsg() {
+  $('#selected-state').html("No state has been selected. Please select a state").addClass("text-danger");  
+} 
+
 $(document).ready(function () {
   var arr_majors = [];
   var SelectedState = null;
@@ -707,7 +711,7 @@ $(document).ready(function () {
     $('#all-major-groups-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_pggmajor = $.grep(arr_stpggmajor, function (n, i) {
@@ -729,7 +733,7 @@ $(document).ready(function () {
     $('#agriculture-and-natural-resources-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -748,7 +752,7 @@ $(document).ready(function () {
     $('#architecture-and-engineering-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -767,7 +771,7 @@ $(document).ready(function () {
     $('#arts-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -786,7 +790,7 @@ $(document).ready(function () {
     $('#biology-and-life-sciences-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -805,7 +809,7 @@ $(document).ready(function () {
     $('#business-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -824,7 +828,7 @@ $(document).ready(function () {
     $('#communications-and-journalism-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -843,7 +847,7 @@ $(document).ready(function () {
     $('#computers-statistics-and-mathematics-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -862,7 +866,7 @@ $(document).ready(function () {
     $('#education-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -881,7 +885,7 @@ $(document).ready(function () {
     $('#health-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -900,7 +904,7 @@ $(document).ready(function () {
     $('#humanities-and-liberal-arts-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -919,7 +923,7 @@ $(document).ready(function () {
     $('#industrial-arts-consumer-services-and-recreation-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -938,7 +942,7 @@ $(document).ready(function () {
     $('#law-and-public-policy-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -957,7 +961,7 @@ $(document).ready(function () {
     $('#physical-sciences-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -976,7 +980,7 @@ $(document).ready(function () {
     $('#psychology-and-social-work-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -995,7 +999,7 @@ $(document).ready(function () {
     $('#social-sciences-icon').click(function(){
       if (viewState) {
         if (FullState == null) {
-          alert("No state has been selected");
+          noStateSelectedMsg();
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
@@ -1036,15 +1040,16 @@ $(document).ready(function () {
       'click' : function(event, data) {
         FullState = convert_state(data.name,"name");  
         SelectedState = data.name;  
-        $('#selected-state').html('You have selected: ' + FullState + '. Now select a major on the left.');
+        $('#selected-state').html('You have selected: ' + FullState + '. Now select a major on the left.').removeClass("text-danger");
       }
     });
     
     $("input[name='chart-type']").change(function(){
       
       if ($( "input:checked" ).val() == 'States'){
-        // console.log($( "input:checked" ).val());
-        document.getElementById('btn-map').style.visibility = "visible";
+        //console.log($( "input:checked" ).val());
+        //$('#btn-map').css('visibility', 'visible');
+        $('#btn-map').css('transition', 'opacity 2s ease-in-out').css('opacity', '1').css('pointerEvents', 'auto');
         viewState = true;
         if (!stateDataRead) {
           $.get('st_baplus_ftfy_25_59.txt', function (majorsdata, status) {
@@ -1088,7 +1093,8 @@ $(document).ready(function () {
         viewState = false;
         SelectedState = null;
         FullState = null;
-        document.getElementById('btn-map').style.visibility = "hidden";
+        //$('#btn-map').css('visibility', 'hidden');
+        $('#btn-map').css('transition', 'opacity 2s ease-in-out').css('opacity', '0').css('pointerEvents', 'none');        
       };      
     });
   });
