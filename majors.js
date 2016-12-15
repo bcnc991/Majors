@@ -1094,7 +1094,7 @@ $(document).ready(function () {
         SelectedState = null;
         FullState = null;
         //$('#btn-map').css('visibility', 'hidden');
-        $('#btn-map').css('transition', 'opacity 2s ease-in-out').css('opacity', '0').css('pointerEvents', 'none');        
+        $('#btn-map').css('transition', 'opacity 2s ease-in-out').css('opacity', '0.1').css('pointerEvents', 'none');        
       };      
     });
   });

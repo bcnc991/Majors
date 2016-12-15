@@ -61,7 +61,7 @@ input[type="radio"] {
 #btn-map {
   /* visibility: hidden; */
   /* display: none; */
- opacity: 0;
+ opacity: 0.1;
  pointer-events: none;
 }
 .visible {
