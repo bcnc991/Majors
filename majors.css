@@ -1,7 +1,7 @@
 #main_chart, #modal_chart {
   position: relative;
   height: 600px;
-  width: 70%;
+  width: 60%;
   float: left;
 }
 
@@ -15,7 +15,6 @@
 #modal_chart {
   padding-top: 0
 }
-
 #footnote {
   padding: 20px
 }
@@ -25,7 +24,6 @@
   font-weight: bold;
   font-size: 1.8em;
 }
-
 
 input[type="radio"] {
   margin: 0px 10px 0px 10px;

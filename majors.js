@@ -1,45 +1,43 @@
 function pushData(dobj, things) {
   dobj.push({'schl': things[0],
-          'gmajor': String(things[1]).replace(/['"]+/g, ''),
-          'dmajor': String(things[2]).replace(/['"]+/g, ''),
-          'type': parseFloat(things[3]),
-          'freq': parseFloat(things[4]),
-          'p50': parseFloat(things[5]),
-          'p25': parseFloat(things[6]),
-          'p75': parseFloat(things[7]),
-          'gradegftfy': parseFloat(things[10]),
-          'gradegall': parseFloat(things[11]),
-          'emprate': parseFloat(things[12]),
-          'pct_ts': parseFloat(things[13]),
-          'pct_tsg': parseFloat(things[14]),
-          'p50r': parseFloat(things[15]),
-          'p25r': parseFloat(things[16]),
-          'p75r': parseFloat(things[17]),
-          'pct_ts_all': parseFloat(things[18]),
-          'pct_tsg_all': parseFloat(things[19])
+          'dmajor': String(things[1]).replace(/['"]+/g, ''),
+          'type': parseFloat(things[2]),
+          'freq': parseFloat(things[3]),
+          'p50': parseFloat(things[4]),
+          'p25': parseFloat(things[5]),
+          'p75': parseFloat(things[6]),
+          'gradegftfy': parseFloat(things[7]),
+          'gradegall': parseFloat(things[8]),
+          'emprate': parseFloat(things[9]),
+          'pct_ts': parseFloat(things[10]),
+          'pct_tsg': parseFloat(things[11]),
+          'pct_ts_all': parseFloat(things[12]),
+          'pct_tsg_all': parseFloat(things[13]),
+          'pct_gths': parseFloat(things[14]),
+          'pct_gthsftfy': parseFloat(things[15]),
+          'gmajor': String(things[16]).replace(/['"]+/g, '')
           });
 }
+
 function pushStateData(dobj, things) {
-  dobj.push({'stfips': things[0],
-          'schl': things[1],
-          'gmajor': String(things[2]).replace(/['"]+/g, ''),
-          'dmajor': String(things[3]).replace(/['"]+/g, ''),
-          'type': parseFloat(things[4]),
-          'freq': parseFloat(things[5]),
-          'p50': parseFloat(things[6]),
-          'p25': parseFloat(things[7]),
-          'p75': parseFloat(things[8]),
-          'gradegftfy': parseFloat(things[11]),
-          'gradegall': parseFloat(things[12]),
-          'emprate': parseFloat(things[13]),
-          'pct_ts': parseFloat(things[14]),
-          'stabbr': things[15],
-          'pct_tsg': parseFloat(things[16]),
-          'p50r': parseFloat(things[17]),
-          'p25r': parseFloat(things[18]),
-          'p75r': parseFloat(things[19]),
-          'pct_ts_all': parseFloat(things[20]),
-          'pct_tsg_all': parseFloat(things[21])
+  dobj.push({'schl': things[0],
+          'dmajor': String(things[1]).replace(/['"]+/g, ''),
+          'type': parseFloat(things[2]),
+          'freq': parseFloat(things[3]),
+          'p50': parseFloat(things[4]),
+          'p25': parseFloat(things[5]),
+          'p75': parseFloat(things[6]),
+          'gradegftfy': parseFloat(things[7]),
+          'gradegall': parseFloat(things[8]),
+          'emprate': parseFloat(things[9]),
+          'pct_ts': parseFloat(things[10]),
+          'stabbr': things[11],
+          'pct_tsg': parseFloat(things[12]),
+          'pct_ts_all': parseFloat(things[13]),
+          'pct_tsg_all': parseFloat(things[14]),
+          'pct_gths': parseFloat(things[15]),
+          'pct_gthsftfy': parseFloat(things[16]),
+          'gmajor': String(things[17]).replace(/['"]+/g, '')
           });
 }
 
@@ -89,34 +87,22 @@ function convert_state(name, to) {
     return returnthis;
 }
 
-function drawmap () {
-      $('#map').usmap({
-      showLabels: true,
-      stateHoverStyles: {fill: '#DABA61'},    
-      'mouseover': function(event, data) {
-        var FullState = convert_state(data.name,"name");    
-        $('#clicked-state').text('Click for selection to take effect: '+ FullState);
-      },
-      'mouseout': function(event, data) {
-        $('#clicked-state').text('Select a state below.');
-      },      
-      'click' : function(event, data) {
-        var FullState = convert_state(data.name,"name");    
-        $('#selected-state').html('You have selected: ' + FullState + '. Now select a major on the left.');
-      }
-    });
-}
 function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate) {
     // Get the modal
     var str_gmajor = pmajorname;
     var color_to_use = major_groups.indexOf(str_gmajor);
-   
+    
     modal_badata = $.grep(pbadata, function (n, i) {
-      return n.gmajor == str_gmajor;
+      // replace blank space to make comparison: Problem cropped up after replacing files with breaks in major names?
+      return n.gmajor.replace(/\s/g, '') == str_gmajor.replace(/\s/g, '');
     });
     modal_graddata = $.grep(pgraddata, function (n, i) {
-      return n.gmajor == str_gmajor;
+      return n.gmajor.replace(/\s/g, '') == str_gmajor.replace(/\s/g, '');
     });
+    
+    // TODO: Check that majors in ba and grad modals are identical (?) 
+    // This should have been handled in the SAS program that produced the spreadsheet 
+    // TODO: Trap chart display when there is no data to show 
     
     var xcat_dmajor = [];
     // Fill arrays for charts
@@ -130,7 +116,7 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
     $.each(modal_badata, function(items, item) {
        i = i + 1;
        arr_rngbadmajor.push({low:item.p25, high:item.p75});
-       arr_p50badmajor.push({x:i - 0.2, y:item.p50});
+       arr_p50badmajor.push({x:i - 0.2, y:item.p50, smpSz:item.freq});
     });
     var arr_rnggraddmajor = [];
     var arr_p50graddmajor = [];
@@ -140,7 +126,7 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
        var dboost = Math.round((modal_graddata[i].p50 - pbadata[i].p50) / 10000) * 10000;
        var boost = Math.round(((modal_graddata[i].p50/pbadata[i].p50) - 1) * 100) + "%";
        arr_rnggraddmajor.push({low:item.p25, high:item.p75});
-       arr_p50graddmajor.push({x:i + 0.15, y:item.p50, boost: boost, dboost: dboost});
+       arr_p50graddmajor.push({x:i + 0.15, y:item.p50, boost: boost, dboost: dboost, smpSz:item.freq});
     });
 
     var arr_pctbadmajor = [];
@@ -151,7 +137,7 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
     $.each(modal_graddata, function(items, item) {
       arr_pctgraddmajor.push(item.pct_tsg);
     });
-
+    
     $('#modal_chart').highcharts({
         chart: {
             inverted: true
@@ -159,7 +145,9 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
         title: {
             text: 'Earnings'
         },
-
+        tooltip: {
+          useHTML: true
+        },
         subtitle: {
             text: ''
         },
@@ -218,12 +206,19 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
                 tooltip: {
                     hideDelay: 100,
                     pointFormatter: function () {
+                      var warnmsg = '';
                       if (this.series.name == "Bachelor's degree") {
-                        return "Median earnings: " + Highcharts.numberFormat(Math.round(this.y/10000)*10000,0) + '<br>';
+                        if (this.smpSz < 100) {
+                          warnmsg = 'Sample size may be unreliable. <br>';
+                        }
+                        return "Median earnings: " + Highcharts.numberFormat(Math.round(this.y/10000)*10000,0) + '<br>' + warnmsg;
                         }
                        else {
+                        if (this.smpSz < 100) {
+                          warnmsg = 'Sample size may be unreliable. <br>';
+                        }
                          return "Median earnings: " + Highcharts.numberFormat(Math.round(this.y/10000)*10000,0) + '<br>' +
-                      'Graduate boost: ' + Highcharts.numberFormat(this.dboost,0) + " (" + this.boost + ")";
+                      'Graduate boost: ' + Highcharts.numberFormat(this.dboost,0) + " (" + this.boost + ")" + '<br>' + warnmsg;
                        }
                     }
                 }
@@ -353,10 +348,10 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
     
     var modal = document.getElementById('myModal');
     if (pstate != null) {
-      $('.modal-header h2').text('All major groups: ' + pstate);
+      $('.modal-header h2').text(str_gmajor + ': ' + pstate);
     }
     else {
-      $('.modal-header h2').text('All major groups: National');
+      $('.modal-header h2').text(str_gmajor + ': National');
     }    
     modal.style.display = "block";
     
@@ -431,10 +426,11 @@ function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
             //align: 'top',
             //rotation: 0
           },
+          useHTML: true,
           labels: {
             style: {
               fontSize: '14px',
-              fontWeight: '500'
+              fontWeight: '500',
             }
           },
           categories: xcat_gmajor
@@ -497,6 +493,7 @@ function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
               },
               tooltip: {
                   hideDelay: 100,
+                  headerFormat: '<span style="font-size: 10px">{point.key}</span><br/>',
                   pointFormatter: function () {
                       var diff = Math.round(this.high/10000)*10000 - Math.round(this.low/10000)*10000;
                       return this.series.name + ': <br>' +
@@ -509,6 +506,9 @@ function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
       },
       legend: {
           enabled: false
+      },
+      tooltip: {
+        useHTML: true
       },
       series: [{
           name: "Bachelor's degree",
@@ -588,6 +588,7 @@ function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
               },
               tooltip: {
                   hideDelay: 100,
+                  useHTML: true,
                   pointFormatter: function () {
                       return this.series.name +": " + Math.round(this.y*100) + "%";
                     }
@@ -671,7 +672,7 @@ $(document).ready(function () {
   var SelectedState = null;
   var FullState = null;
   
-  $.get('baplus_ftfy_25_59.txt', function (majorsdata, status) {
+  $.get('webbaplus_ftfy_25_59.txt', function (majorsdata, status) {
     var lines = majorsdata.split('\n');
       $.each(lines, function(lineNo, line) {
         var items = line.split('\t');
@@ -679,6 +680,7 @@ $(document).ready(function () {
           pushData(arr_majors, items);
         }
       });
+
     // Percent grad degree of majors is type = 2 and 3
     var arr_pggmajor = $.grep(arr_majors, function (n, i) {
       return n.type == 2;
@@ -704,7 +706,7 @@ $(document).ready(function () {
     var arr_graddmajor = $.grep(arr_majors, function (n, i) {
       return n.type == 7 & n.schl == 'Graduate degree';
     });
-
+    
     var overall_ba = arr_schl[0].p50;
     var overall_grad = arr_schl[1].p50;
     
@@ -715,13 +717,13 @@ $(document).ready(function () {
         }
         else {
           var varr_pggmajor = $.grep(arr_stpggmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_bagmajor = $.grep(arr_stbagmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_gradgmajor = $.grep(arr_stgradgmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           display_all_majors(varr_pggmajor, varr_bagmajor, varr_gradgmajor, overall_ba, overall_grad, FullState);      
         }  
@@ -737,10 +739,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Agriculture and natural resources', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);
         }        
@@ -756,10 +758,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Architecture and engineering', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
@@ -775,10 +777,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Arts', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
@@ -794,10 +796,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Biology and life sciences', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
@@ -813,10 +815,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Business', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
@@ -832,10 +834,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Communications and journalism', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
@@ -851,10 +853,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Computers, statistics, and mathematics', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
@@ -870,10 +872,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Education', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
@@ -889,10 +891,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Health', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
@@ -908,16 +910,16 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Humanities and liberal arts', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
       }
       else {
-        change_major('Humanities and liberal arts');
+        change_major('Humanities and liberal arts', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
       }
     });
     $('#industrial-arts-consumer-services-and-recreation-icon').click(function(){
@@ -927,16 +929,16 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
-          change_major('Industrial arts, consumer services, and recreation', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
+          change_major('Industrial arts, consumer <br> services, and recreation', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
       }
       else {
-        change_major('Industrial arts, consumer services, and recreation', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
+        change_major('Industrial arts, consumer <br> services, and recreation', arr_badmajor, arr_graddmajor, overall_ba, overall_grad);
       }
     });
     $('#law-and-public-policy-icon').click(function(){
@@ -946,10 +948,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Law and public policy', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);
         }        
@@ -965,10 +967,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Physical sciences', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);
         }        
@@ -984,10 +986,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Psychology and social work', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);        
         }
@@ -1003,10 +1005,10 @@ $(document).ready(function () {
         }
         else {
           var varr_badmajor = $.grep(arr_stbadmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           var varr_graddmajor = $.grep(arr_stgraddmajor, function (n, i) {
-            return n.stabbr == SelectedState;
+            return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
           change_major('Social sciences', varr_badmajor, varr_graddmajor, overall_ba, overall_grad, FullState);
         }        
@@ -1052,7 +1054,7 @@ $(document).ready(function () {
         $('#btn-map').css('transition', 'opacity 2s ease-in-out').css('opacity', '1').css('pointerEvents', 'auto');
         viewState = true;
         if (!stateDataRead) {
-          $.get('st_baplus_ftfy_25_59.txt', function (majorsdata, status) {
+          $.get('webst_baplus_ftfy_25_59.txt', function (majorsdata, status) {
           var lines = majorsdata.split('\n');
           $.each(lines, function(lineNo, line) {
             var items = line.split('\t');
@@ -1060,6 +1062,7 @@ $(document).ready(function () {
               pushStateData(arr_stmajors, items);
             }
           });
+          console.log(arr_stmajors);        
           // Percent grad degree of majors 
           arr_stpggmajor = $.grep(arr_stmajors, function (n, i) {
             return n.type == 10;
