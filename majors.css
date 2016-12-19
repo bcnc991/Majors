@@ -1,34 +1,39 @@
 #main_chart, #modal_chart {
-  position: relative;
   height: 600px;
-  width: 60%;
+  /*
+  margin: 0 auto;
+  width: 50%;
+  position: absolute;
   float: left;
+  */
 }
 
 #main_popchart,#modal_popchart {
-  position: relative;
   height: 600px;
-  width: 30%;
+  /*
+  margin: 0 auto;
+  width: 50%;
+  position: absolute;
   float: right;
+  */
 }
-
 #modal_chart {
   padding-top: 0
 }
 #footnote {
   padding: 20px
 }
-
 .radio-buttons {
   padding: 20px;
   font-weight: bold;
   font-size: 1.8em;
 }
-
+.nowrapbutton {
+  white-space: nowrap;
+}
 input[type="radio"] {
   margin: 0px 10px 0px 10px;
 }
-
 .sel_group_majors {
   padding-bottom: 25px;  
 }
@@ -62,13 +67,11 @@ input[type="radio"] {
  opacity: 0.1;
  pointer-events: none;
 }
-.visible {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 2s linear;  
+.fa-stack {
+  font-size: 3.0vh;
 }
 .all-major-groups-icon {
-  color: #800000 
+  color: #800000;
 }
 .agriculture-and-natural-resources-icon {
   color: #BD226B;

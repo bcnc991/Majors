@@ -369,6 +369,10 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
             modal.style.display = "none";
         };
     };
+    // Need this to force resize so that charts show correctly
+    var evt = document.createEvent("HTMLEvents"); 
+    evt.initEvent("resize", false, true); 
+    window.dispatchEvent(evt);
 }
 
 function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
@@ -1042,7 +1046,9 @@ $(document).ready(function () {
       'click' : function(event, data) {
         FullState = convert_state(data.name,"name");  
         SelectedState = data.name;  
-        $('#selected-state').html('You have selected: ' + FullState + '. Now select a major on the left.').removeClass("text-danger");
+        $('#selected-state').html('You have selected: ' + FullState + '. Now select a major on the left.')
+          .removeClass("text-danger");
+        $('#selected-state').css('backgroundColor', '#53B64E');
       }
     });
     
@@ -1062,7 +1068,7 @@ $(document).ready(function () {
               pushStateData(arr_stmajors, items);
             }
           });
-          console.log(arr_stmajors);        
+          // console.log(arr_stmajors);        
           // Percent grad degree of majors 
           arr_stpggmajor = $.grep(arr_stmajors, function (n, i) {
             return n.type == 10;
