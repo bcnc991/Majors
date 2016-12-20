@@ -100,8 +100,6 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
       return n.gmajor.replace(/\s/g, '') == str_gmajor.replace(/\s/g, '');
     });
     
-    // TODO: Check that majors in ba and grad modals are identical (?) 
-    // This should have been handled in the SAS program that produced the spreadsheet 
     // TODO: Trap chart display when there is no data to show 
     
     var xcat_dmajor = [];
@@ -123,10 +121,13 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
     var i = -1;
     $.each(modal_graddata, function(items, item) {
        i = i + 1;
-       var dboost = Math.round((modal_graddata[i].p50 - pbadata[i].p50) / 10000) * 10000;
-       var boost = Math.round(((modal_graddata[i].p50/pbadata[i].p50) - 1) * 100) + "%";
-       arr_rnggraddmajor.push({low:item.p25, high:item.p75});
-       arr_p50graddmajor.push({x:i + 0.15, y:item.p50, boost: boost, dboost: dboost, smpSz:item.freq});
+       // Compute boost in graduate degree earnings if majors match 
+       if (modal_badata[i].dmajor == modal_graddata[i].dmajor){
+         var dboost = Math.round((modal_graddata[i].p50 - modal_badata[i].p50) / 10000) * 10000;
+         var boost = Math.round(((modal_graddata[i].p50/modal_badata[i].p50) - 1) * 100) + "%";
+         arr_rnggraddmajor.push({low:item.p25, high:item.p75});
+         arr_p50graddmajor.push({x:i + 0.15, y:item.p50, boost: boost, dboost: dboost, smpSz:item.freq});
+       };
     });
 
     var arr_pctbadmajor = [];
@@ -138,6 +139,20 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
       arr_pctgraddmajor.push(item.pct_tsg);
     });
     
+    var numXcat = xcat_dmajor.length;
+    var chHeight = 0; 
+    if (numXcat > 0 && numXcat < 6) {
+      chHeight = 400;
+    }
+    else if (numXcat >= 5 && numXcat < 15) {
+      chHeight = 600;
+    }
+    else if (numXcat >= 15) {
+      chHeight = 800;
+    }
+    $('#modal_chart').height(chHeight);
+    $('#modal_popchart').height(chHeight);
+  
     $('#modal_chart').highcharts({
         chart: {
             inverted: true
@@ -209,13 +224,13 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
                       var warnmsg = '';
                       if (this.series.name == "Bachelor's degree") {
                         if (this.smpSz < 100) {
-                          warnmsg = 'Sample size may be unreliable. <br>';
+                          warnmsg = 'Sample size (' + this.smpSz + ') may be unreliable. <br>';
                         }
                         return "Median earnings: " + Highcharts.numberFormat(Math.round(this.y/10000)*10000,0) + '<br>' + warnmsg;
                         }
                        else {
                         if (this.smpSz < 100) {
-                          warnmsg = 'Sample size may be unreliable. <br>';
+                          warnmsg = 'Sample size (' + this.smpSz + ') may be unreliable. <br>';
                         }
                          return "Median earnings: " + Highcharts.numberFormat(Math.round(this.y/10000)*10000,0) + '<br>' +
                       'Graduate boost: ' + Highcharts.numberFormat(this.dboost,0) + " (" + this.boost + ")" + '<br>' + warnmsg;
@@ -346,28 +361,30 @@ function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate
       ]
     });
     
-    var modal = document.getElementById('myModal');
     if (pstate != null) {
-      $('.modal-header h2').text(str_gmajor + ': ' + pstate);
+      $('.chart-header h2').text(str_gmajor.replace('<br> ', '') + ': ' + pstate);
     }
     else {
-      $('.modal-header h2').text(str_gmajor + ': National');
+      $('.chart-header h2').text(str_gmajor.replace('<br> ', '') + ': National');
     }    
-    modal.style.display = "block";
-    
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    var modal = document.getElementById('myModal');
+    if (modal != null) {
+      modal.style.display = "block";
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    };
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        };
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+          modal.style.display = "none";
+      };
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+          if (event.target == modal) {
+              modal.style.display = "none";
+          };
+      };
     };
     // Need this to force resize so that charts show correctly
     var evt = document.createEvent("HTMLEvents"); 
@@ -622,26 +639,28 @@ function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
     
   var modal = document.getElementById('myModal');
   if (pstate != null) {
-    $('.modal-header h2').text('All major groups: ' + pstate);
+    $('.chart-header h2').text('All major groups: ' + pstate);
   }
   else {
-    $('.modal-header h2').text('All major groups: National');
+    $('.chart-header h2').text('All major groups: National');
   }
-  modal.style.display = "block";
-  
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
+  if (modal != null) {
+    modal.style.display = "block";
 
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-      modal.style.display = "none";
-  };
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
 
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-      if (event.target == modal) {
-          modal.style.display = "none";
-      };
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        };
+    };
   };
 }
 
@@ -729,7 +748,7 @@ $(document).ready(function () {
           var varr_gradgmajor = $.grep(arr_stgradgmajor, function (n, i) {
             return n.stabbr.replace(/\s/g, '') == SelectedState.replace(/\s/g, '');
           });
-          display_all_majors(varr_pggmajor, varr_bagmajor, varr_gradgmajor, overall_ba, overall_grad, FullState);      
+          display_all_majors(varr_pggmajor, varr_bagmajor, varr_gradgmajor, overall_ba, overall_grad, FullState);
         }  
       }
       else {
@@ -1103,6 +1122,7 @@ $(document).ready(function () {
         SelectedState = null;
         FullState = null;
         //$('#btn-map').css('visibility', 'hidden');
+        $('#selected-state').css('background', '#f2f2f2');
         $('#btn-map').css('transition', 'opacity 2s ease-in-out').css('opacity', '0.1').css('pointerEvents', 'none');        
       };      
     });
