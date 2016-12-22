@@ -1,0 +1,71 @@
+.row {
+  text-align: center;
+}
+h1 {
+  padding-left: 15px;
+}
+label.col-sm-2 {
+  padding-top: 5px;
+}
+#selState {
+  padding-top: 5px;
+}
+.thetooltip {
+    border: 1px solid #2f7ed8;
+    background-color: #fff;
+    opacity: 0.8;
+    padding: 4px 12px;
+    border-radius: 3px;
+    position: absolute;
+    top:100px;
+    box-shadow: 1px 1px 3px #666;
+}
+
+#all-major-groups-icon {
+  color: #800000;
+}
+#agriculture-and-natural-resources-icon {
+  color: #BD226B;
+}
+#architecture-and-engineering-icon {
+  color: #D92423;
+}
+#arts-icon {
+  color: #D96637;
+}
+#biology-and-life-sciences-icon {
+  color: #F38C3B; 
+}
+#business-icon {
+  color: #FBAF31; 
+}
+#communications-and-journalism-icon {
+  color: #A6BE43; 
+}
+#computers-statistics-and-mathematics-icon {
+  color: #53B64E; 
+}
+#education-icon {
+  color: #0D723D; 
+}
+#health-icon {
+  color: #169882; 
+}
+#humanities-and-liberal-arts-icon {
+  color: #55C4D5; 
+}
+#industrial-arts-consumer-services-and-recreation-icon {
+  color: #25A0D8; 
+}
+#law-and-public-policy-icon {
+  color: #147FE0; 
+}
+#physical-sciences-icon {
+  color: #0B5D92; 
+}
+#psychology-and-social-work-icon {
+  color: #7D7BA4; 
+}
+#social-sciences-icon {
+  color: #8C65A9; 
+}
