@@ -42,13 +42,13 @@ input[type="radio"] {
 }
 
 #clicked-state {
-  width: 50%;
+  width: 80%;
   background:#f2f2f2;
   padding: 5px;
   font-weight: bold;
 }
 #selected-state {
-  width: 60%;
+  width: 100%;
   height: 4.0vh;
   background:#f2f2f2;
   padding: 5px;
