@@ -145,9 +145,13 @@ function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
       text: 'Earnings'
     },
 
-    subtitle: {
-      text: ''
-    },
+    /*subtitle: {
+      text: "Source: U.S. Census Bureau, <em>American Community Survey</em> micro data, 2009-2015, based on full-time full-year workers age 25-59 with a Bachelor's degree but without a graduate degree.",
+      floating: true,
+      align: 'left',
+      verticalAlign: 'bottom',
+      y: 15
+    },*/
     credits: {
       enabled: false
     },
@@ -294,9 +298,13 @@ function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
       text: 'Share'
     },
 
-    subtitle: {
-      text: ''
-    },
+/*    subtitle: {
+      text: "Percents may not sum to 100 because small sample sizes were excluded.",
+      floating: true,
+      align: 'left',
+      verticalAlign: 'bottom',
+      y: 15
+    },*/
     credits: {
       enabled: false
     },
@@ -365,7 +373,11 @@ function display_all_majors(pxcat, pgba, pggrad, balines, gradlines, pstate) {
       }
       ]
   });
-  $('.well h5').text('All major groups: National');
+  if (pstate) {
+    $('.well h5').text('National' + ': ' + pstate);
+  } else {
+    $('.well h5').text('National' + ': National');
+  }
 }
 
 function change_major(pmajorname, pbadata, pgraddata, balines, gradlines, pstate) {
@@ -1056,6 +1068,8 @@ $(document).ready(function () {
         }
       } else {
         $("#selState").text("Currently viewing national data.");
+        FullState = null;
+        viewState = false;
       }
     });
   });
